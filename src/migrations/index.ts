@@ -1,4 +1,5 @@
-import * as migration_20260105_201500_initial from './20260105_201500_initial'
+import * as migration_20260105_201500_initial from './20260105_201500_initial';
+import * as migration_20260127_140741_add_slides_to_popup_banner from './20260127_140741_add_slides_to_popup_banner';
 
 export const migrations = [
   {
@@ -6,4 +7,9 @@ export const migrations = [
     down: migration_20260105_201500_initial.down,
     name: '20260105_201500_initial',
   },
-]
+  {
+    up: migration_20260127_140741_add_slides_to_popup_banner.up,
+    down: migration_20260127_140741_add_slides_to_popup_banner.down,
+    name: '20260127_140741_add_slides_to_popup_banner'
+  },
+];

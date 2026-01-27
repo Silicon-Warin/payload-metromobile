@@ -1926,7 +1926,42 @@ export interface PopupBanner {
   theme?: ('info' | 'promo' | 'urgent') | null;
   startAt?: string | null;
   endAt?: string | null;
+  /**
+   * Legacy single image (deprecated, use slides instead)
+   */
   media?: (number | null) | Media;
+  /**
+   * Carousel slides - supports multiple images
+   */
+  slides?:
+    | {
+        /**
+         * Slide title
+         */
+        title?: string | null;
+        /**
+         * Slide description text
+         */
+        description?: string | null;
+        /**
+         * Slide image
+         */
+        media: number | Media;
+        /**
+         * Button text
+         */
+        ctaLabel?: string | null;
+        /**
+         * Button link URL
+         */
+        ctaHref?: string | null;
+        /**
+         * Open link in new tab
+         */
+        ctaNewTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * Optional. Use YouTube/Vimeo/Facebook URL.
    */
@@ -1997,6 +2032,17 @@ export interface PopupBannerSelect<T extends boolean = true> {
   startAt?: T;
   endAt?: T;
   media?: T;
+  slides?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        media?: T;
+        ctaLabel?: T;
+        ctaHref?: T;
+        ctaNewTab?: T;
+        id?: T;
+      };
   videoUrl?: T;
   targeting?: T;
   _status?: T;

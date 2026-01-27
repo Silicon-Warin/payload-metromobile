@@ -57,6 +57,63 @@ export const PopupBanner: GlobalConfig = {
       name: 'media',
       type: 'upload',
       relationTo: 'media',
+      admin: {
+        description: 'Legacy single image (deprecated, use slides instead)',
+      },
+    },
+    {
+      name: 'slides',
+      type: 'array',
+      admin: {
+        description: 'Carousel slides - supports multiple images',
+      },
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          admin: {
+            description: 'Slide title',
+          },
+        },
+        {
+          name: 'description',
+          type: 'textarea',
+          admin: {
+            description: 'Slide description text',
+          },
+        },
+        {
+          name: 'media',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+          admin: {
+            description: 'Slide image',
+          },
+        },
+        {
+          name: 'ctaLabel',
+          type: 'text',
+          admin: {
+            description: 'Button text',
+          },
+        },
+        {
+          name: 'ctaHref',
+          type: 'text',
+          admin: {
+            description: 'Button link URL',
+          },
+        },
+        {
+          name: 'ctaNewTab',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            description: 'Open link in new tab',
+          },
+        },
+      ],
     },
     {
       name: 'videoUrl',
