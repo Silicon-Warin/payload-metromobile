@@ -196,6 +196,49 @@ export const Promotions: CollectionConfig = {
       },
     },
     {
+      name: 'pricingOverrides',
+      type: 'array',
+      admin: {
+        description:
+          'Override prices for this campaign. If empty, frontend should fallback to model-pricing.',
+      },
+      fields: [
+        {
+          name: 'variantId',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'variantName',
+          type: 'text',
+          admin: {
+            description: 'Optional display name (fallback to model-pricing variant name).',
+          },
+        },
+        {
+          name: 'promoPrice',
+          type: 'number',
+          required: true,
+          min: 0,
+        },
+        {
+          name: 'originalPrice',
+          type: 'number',
+          min: 0,
+        },
+        {
+          name: 'downPayment',
+          type: 'number',
+          min: 0,
+        },
+        {
+          name: 'interestRate',
+          type: 'number',
+          min: 0,
+        },
+      ],
+    },
+    {
       name: 'heroMedia',
       type: 'upload',
       relationTo: 'media',

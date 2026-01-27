@@ -70,6 +70,7 @@ export interface Config {
     pages: Page;
     posts: Post;
     promotions: Promotion;
+    'model-pricing': ModelPricing;
     media: Media;
     categories: Category;
     users: User;
@@ -93,6 +94,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     promotions: PromotionsSelect<false> | PromotionsSelect<true>;
+    'model-pricing': ModelPricingSelect<false> | ModelPricingSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -816,6 +818,23 @@ export interface Promotion {
    * Optional. Match frontend model slug (prevents typos).
    */
   modelSlug?: ('seal-5-dmi' | 'sealion7' | 'm6' | 'sealion-6-dmi' | 'atto3' | 'dolphin' | 'seal') | null;
+  /**
+   * Override prices for this campaign. If empty, frontend should fallback to model-pricing.
+   */
+  pricingOverrides?:
+    | {
+        variantId: string;
+        /**
+         * Optional display name (fallback to model-pricing variant name).
+         */
+        variantName?: string | null;
+        promoPrice: number;
+        originalPrice?: number | null;
+        downPayment?: number | null;
+        interestRate?: number | null;
+        id?: string | null;
+      }[]
+    | null;
   heroMedia?: (number | null) | Media;
   gallery?:
     | {
@@ -870,6 +889,10 @@ export interface Promotion {
          * Price/value (auto-extracted)
          */
         value?: string | null;
+        /**
+         * Variant name (e.g., "Standard Range", "Extended Range")
+         */
+        variantName?: string | null;
         /**
          * Emoji or icon name
          */
@@ -931,6 +954,33 @@ export interface Promotion {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "model-pricing".
+ */
+export interface ModelPricing {
+  id: number;
+  /**
+   * Match frontend model slug (prevents typos).
+   */
+  modelSlug: 'seal-5-dmi' | 'sealion7' | 'm6' | 'sealion-6-dmi' | 'atto3' | 'dolphin' | 'seal';
+  currency: 'THB';
+  basePrice: number;
+  variants?:
+    | {
+        variantId: string;
+        name: string;
+        price: number;
+        originalPrice?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  region?: string | null;
+  effectiveDate: string;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1133,6 +1183,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'promotions';
         value: number | Promotion;
+      } | null)
+    | ({
+        relationTo: 'model-pricing';
+        value: number | ModelPricing;
       } | null)
     | ({
         relationTo: 'media';
@@ -1388,6 +1442,17 @@ export interface PromotionsSelect<T extends boolean = true> {
   startDate?: T;
   endDate?: T;
   modelSlug?: T;
+  pricingOverrides?:
+    | T
+    | {
+        variantId?: T;
+        variantName?: T;
+        promoPrice?: T;
+        originalPrice?: T;
+        downPayment?: T;
+        interestRate?: T;
+        id?: T;
+      };
   heroMedia?: T;
   gallery?:
     | T
@@ -1407,6 +1472,7 @@ export interface PromotionsSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         value?: T;
+        variantName?: T;
         icon?: T;
         sort?: T;
         id?: T;
@@ -1437,6 +1503,29 @@ export interface PromotionsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "model-pricing_select".
+ */
+export interface ModelPricingSelect<T extends boolean = true> {
+  modelSlug?: T;
+  currency?: T;
+  basePrice?: T;
+  variants?:
+    | T
+    | {
+        variantId?: T;
+        name?: T;
+        price?: T;
+        originalPrice?: T;
+        id?: T;
+      };
+  region?: T;
+  effectiveDate?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
