@@ -793,6 +793,18 @@ export interface Form {
 export interface Promotion {
   id: number;
   title: string;
+  /**
+   * Short supporting line for promo cards (optional).
+   */
+  subtitle?: string | null;
+  /**
+   * Short plain-text summary for cards/SEO (optional).
+   */
+  description?: string | null;
+  /**
+   * Optional external detail URL (e.g. Rever). Include https://
+   */
+  detailUrl?: string | null;
   campaignStatus: 'active' | 'upcoming' | 'expired';
   /**
    * Lower number = higher priority.
@@ -1368,6 +1380,9 @@ export interface PostsSelect<T extends boolean = true> {
  */
 export interface PromotionsSelect<T extends boolean = true> {
   title?: T;
+  subtitle?: T;
+  description?: T;
+  detailUrl?: T;
   campaignStatus?: T;
   priority?: T;
   startDate?: T;

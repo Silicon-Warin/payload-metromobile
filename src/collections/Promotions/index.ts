@@ -28,10 +28,7 @@ function formatMonthYearSlug(dateString?: string | null): string | null {
   if (!dateString) return null
   const date = new Date(dateString)
   if (Number.isNaN(date.getTime())) return null
-  const month = date
-    .toLocaleString('en-US', { month: 'short' })
-    .toLowerCase()
-    .replace('.', '')
+  const month = date.toLocaleString('en-US', { month: 'short' }).toLowerCase().replace('.', '')
   const year = date.getFullYear()
   return `${month}-${year}`
 }
@@ -73,14 +70,19 @@ async function ensureUniquePromotionSlug(args: {
   return `${candidate}-${Date.now()}`
 }
 
-const autoTitleAndSlug: CollectionBeforeValidateHook = async ({ data, operation, req, originalDoc }) => {
+const autoTitleAndSlug: CollectionBeforeValidateHook = async ({
+  data,
+  operation,
+  req,
+  originalDoc,
+}) => {
   // Only auto-fill on create/update when Title is missing/blank
   if (!data || (operation !== 'create' && operation !== 'update')) return data
 
   const currentTitle = typeof data.title === 'string' ? data.title.trim() : ''
   const modelSlug = typeof data.modelSlug === 'string' ? data.modelSlug : null
   const modelLabel = modelSlug
-    ? BYD_MODEL_OPTIONS.find((m) => m.value === modelSlug)?.label ?? modelSlug
+    ? (BYD_MODEL_OPTIONS.find((m) => m.value === modelSlug)?.label ?? modelSlug)
     : null
 
   // 1) Title: keep short/admin-friendly (SEO title lives in meta.title)
@@ -97,7 +99,9 @@ const autoTitleAndSlug: CollectionBeforeValidateHook = async ({ data, operation,
 
   if (currentSlug.length === 0 && originalSlug.length === 0) {
     if (modelSlug) {
-      const monthYear = formatMonthYearSlug((data as any).startDate ?? (data as any).endDate ?? null)
+      const monthYear = formatMonthYearSlug(
+        (data as any).startDate ?? (data as any).endDate ?? null,
+      )
       const base = monthYear ? `${modelSlug}-${monthYear}` : modelSlug
       ;(data as any).slug = await ensureUniquePromotionSlug({
         candidate: base,
@@ -133,6 +137,28 @@ export const Promotions: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'subtitle',
+      type: 'text',
+      admin: {
+        description: 'Short supporting line for promo cards (optional).',
+      },
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+      admin: {
+        description: 'Short plain-text summary for cards/SEO (optional).',
+        rows: 3,
+      },
+    },
+    {
+      name: 'detailUrl',
+      type: 'text',
+      admin: {
+        description: 'Optional external detail URL (e.g. Rever). Include https://',
+      },
     },
     {
       name: 'campaignStatus',
@@ -252,7 +278,10 @@ export const Promotions: CollectionConfig = {
             { label: '💰 Early Price (ราคาพิเศษ)', value: 'early_price' },
             { label: '💳 Financing (ดาวน์/ดอกเบี้ย)', value: 'financing' },
             { label: '🛡️ Insurance 1Y (ประกันภัย)', value: 'insurance_1y' },
-            { label: '⚙️ Warranty Powertrain (รับประกันระบบขับเคลื่อน)', value: 'warranty_powertrain' },
+            {
+              label: '⚙️ Warranty Powertrain (รับประกันระบบขับเคลื่อน)',
+              value: 'warranty_powertrain',
+            },
             { label: '🚗 Warranty Vehicle (รับประกันคุณภาพรถ)', value: 'warranty_vehicle' },
             { label: '🔋 Battery Warranty (รับประกันแบตเตอรี่)', value: 'battery_warranty' },
             { label: '🆘 Roadside 8Y (ช่วยเหลือฉุกเฉิน)', value: 'roadside_8y' },
