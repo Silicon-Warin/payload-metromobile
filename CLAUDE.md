@@ -288,3 +288,71 @@ curl -X POST https://bydmetromobile.com/api/revalidate/promotion \
 - [Next.js App Router Docs](https://nextjs.org/docs)
 - [Vercel Postgres Docs](https://vercel.com/docs/storage/vercel-postgres)
 - Project-specific rules: `.cursor/rules/*.md` (access control, hooks, queries, etc.)
+
+---
+
+## 🛏️ Wake-up Plan (ตื่นมาทำไรต่อ)
+
+**Last Update**: 2026-01-28
+**Context**: Auto-slide feature added to PopupCarousel in frontend repo (byd-metromobile)
+
+### Completed ✅
+- [x] Added auto-slide functionality to `components/PopupCarousel.tsx` in **byd-metromobile**
+  - Carousel auto-advances every 5 seconds when popup is open
+  - Manual navigation (prev/next) still works
+  - Stops auto-slide when popup closes
+  - Commit: `12daa85` - feat(popup): add auto-slide to PopupCarousel
+
+### Next Steps (ตั่งปุ๊ม)
+
+#### 1️⃣ Frontend: Test Auto-slide in Browser
+- **Repo**: `byd-metromobile`
+- **What**: Visit staging/production and verify PopupCarousel slides automatically
+- **Expected**: Popup shows → slides change every 5 seconds
+- **Files**: `components/PopupCarousel.tsx` (already updated)
+
+#### 2️⃣ Payload CMS: Review ModelPricing Integration (If Needed)
+- **Repo**: `payload-metromobile`
+- **What**: Check if ModelPricing collection updates are needed for any feature flags
+- **Files**: `src/collections/ModelPricing/index.ts` (referenced in IDE)
+- **Status**: ⏸️ **Optional** - only if new pricing tiers were discussed
+
+#### 3️⃣ Frontend: Adjust Auto-slide Interval (Optional)
+- **If**: 5 seconds is too fast/slow for users
+- **Edit**: `components/PopupCarousel.tsx` line 242 → change `5000` to desired ms
+- **Examples**:
+  - `3000` = 3 seconds (faster)
+  - `8000` = 8 seconds (slower)
+  - `10000` = 10 seconds (very slow)
+
+#### 4️⃣ Add Analytics Tracking (Optional Enhancement)
+- **What**: Track when users manually navigate vs auto-slide
+- **Where**: `components/PopupCarousel.tsx` → hooks for `scrollNext/scrollPrev`
+- **Benefit**: Understand if 5-second interval is optimal
+
+#### 5️⃣ Deploy & Monitor
+- **Frontend**: Push changes to `staging` → test → merge to `main`
+- **Monitoring**: Check browser console (logs for any interval cleanup issues)
+- **CMS**: No changes needed unless you adjust the interval config in Payload
+
+### ⚡ Quick Start Commands
+```bash
+# Frontend (byd-metromobile)
+pnpm dev              # Start dev server
+pnpm lint            # Check code quality
+pnpm build           # Test build locally
+
+# Payload CMS (payload-metromobile) - if needed
+pnpm dev             # Start CMS admin
+pnpm generate:types  # Regenerate types after schema changes
+```
+
+### 💡 Notes for Later
+- Auto-slide is hardcoded to **5 seconds** - consider making it configurable in Payload if users need flexibility
+- Currently stops auto-slide only when popup is `!isOpen` - may want to pause on user hover (UX enhancement)
+- No analytics tracking yet on carousel interactions
+
+### 📞 Questions?
+- **PopupCarousel behavior**: Check `components/PopupCarousel.tsx` lines 238-247 (useEffect auto-slide logic)
+- **Payload integration**: Check `src/collections/ModelPricing/index.ts` (referenced file)
+- **Frontend revalidation**: Check `app/api/revalidate/promotion/route.ts` (cache invalidation)
